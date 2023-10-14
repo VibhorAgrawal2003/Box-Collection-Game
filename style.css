@@ -1,0 +1,17 @@
+body{
+    background: #000;
+}
+
+#container {
+    max-width: 1400xp;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);    
+}
+
+#game-canvas {
+    background: #fff;
+    border: 1px solid #000;
+    margin: auto;
+}
