@@ -126,7 +126,8 @@ function SetupCanvas(){
     ctx = canvas.getContext('2d');
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
-    ctx.strokeStyle = 'black';
+    ctx.strokeStyle = '#6de373';
+    ctx.fillStyle = '#6de373';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // objects
@@ -229,15 +230,21 @@ class Road{
         this.x = 0;
         this.y = floorHeight;
         this.thick = canvasWidth;
-        this.tall = 2;
-        this.strokeColor = '#000';
-        this.fillColor = '#000';
+        this.tall = 40;
+        this.strokeColor = '#0a590f';
+        this.fillColor = '#49ba5c';
     }
 
     Draw(){
         ctx.strokeStyle = this.strokeColor;
         ctx.fillStyle = this.fillColor;
         ctx.fillRect(this.x, this.y, this.thick, this.tall);
+
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x + this.thick, this.y);
+        ctx.stroke();
     }
 }
 
