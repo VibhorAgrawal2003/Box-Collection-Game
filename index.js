@@ -13,9 +13,31 @@ let score = 0;
 let clock = 0;
 let maxtime = 6000; 
 
-// animation frames
+let decors;
+
+// background objects
+
+const Decors = {
+    path : './assets/backgrounds/Decors.png',
+
+    tree: {
+        cropX: 0,
+        cropY: 0,
+        cropWidth: 100,
+        cropHeight: 112,
+        scaleX: 200,
+        scaleY: 224,
+    },
+
+};
+
+decors = new Image()
+decors.src = Decors.path;
+
+// character sprites
+
 const Mort = {
-    path: 'assets/sheets/mort.png',
+    path: './assets/sheets/mort.png',
 
     idle1: {
         cropX: 0,
@@ -151,6 +173,18 @@ function Render(){
     ctx.fillText('Score: ' + score.toString(), 20, 24);
     ctx.fillText('Timer: ' + (Math.round((maxtime - clock)/50)).toString(), 20, 48);    
 
+    // Draw the tree
+    ctx.drawImage(
+        decors,
+        Decors.tree.cropX,
+        Decors.tree.cropY,
+        Decors.tree.cropWidth,
+        Decors.tree.cropHeight,
+        0, 140,
+        Decors.tree.scaleX,
+        Decors.tree.scaleY
+    );
+
     // Draw the road
     if(road.visible){
         road.Draw();
@@ -207,11 +241,11 @@ function Render(){
 }
 
 function Gameover(){
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    ctx.fillStyle = 'black';
+    // ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    // ctx.fillStyle = 'black';
     ctx.font = '24px Arial';
-    ctx.fillText('GAME OVER!', 300, 200);
-    ctx.fillText('Final Score: ' + score.toString(), 300, 240);    
+    ctx.fillText('GAME OVER!', canvasWidth/2 - 68, canvasHeight/2 - 20);
+    ctx.fillText('Final Score: ' + score.toString(), canvasWidth/2 - 68, canvasHeight/2 + 20);    
 }
 
 
