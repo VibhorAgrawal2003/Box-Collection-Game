@@ -44,7 +44,7 @@ const Mort = {
         scaleY: 48,
     },
 
-    walk1: {
+    idle4: {
         cropX: 72,
         cropY: 0,
         cropWidth: 24,
@@ -53,7 +53,7 @@ const Mort = {
         scaleY: 48,
     },
 
-    walk2: {
+    walk1: {
         cropX: 96,
         cropY: 0,
         cropWidth: 24,
@@ -62,7 +62,7 @@ const Mort = {
         scaleY: 48,
     },
 
-    walk3: {
+    walk2: {
         cropX: 120,
         cropY: 0,
         cropWidth: 24,
@@ -71,7 +71,7 @@ const Mort = {
         scaleY: 48,
     },    
 
-    walk4: {
+    walk3: {
         cropX: 144,
         cropY: 0,
         cropWidth: 24,
@@ -80,7 +80,7 @@ const Mort = {
         scaleY: 48,
     },  
 
-    walk5: {
+    walk4: {
         cropX: 168,
         cropY: 0,
         cropWidth: 24,
@@ -105,16 +105,7 @@ const Mort = {
         cropHeight: 24,
         scaleX: 48,
         scaleY: 48,
-    },   
-    
-    walk7: {
-        cropX: 240,
-        cropY: 0,
-        cropWidth: 24,
-        cropHeight: 24,
-        scaleX: 48,
-        scaleY: 48,
-    },       
+    },         
 
   };
 
@@ -335,6 +326,10 @@ class Player{
             this.idleFrame = "idle3";
         }
         else if(this.idleFrame == "idle3"){
+            this.character = Mort.idle4;
+            this.idleFrame = "idle4";
+        }
+        else if(this.idleFrame == "idle4"){
             this.character = Mort.idle1;
             this.idleFrame = "idle1";
         }
@@ -364,10 +359,6 @@ class Player{
             this.walkFrame = "walk6";
         }
         else if(this.walkFrame == "walk6"){
-            this.character = Mort.walk7;
-            this.walkFrame = "walk7";
-        }
-        else if(this.walkFrame == "walk7"){
             this.character = Mort.walk1;
             this.walkFrame = "walk1";
         }
@@ -377,7 +368,7 @@ class Player{
     Animate(){
 
         if(this.sequence == "idle"){
-            if(clock % 12 == 0) this.IdleAnimation();
+            if(clock % 6 == 0) this.IdleAnimation();
         }
         else if(this.sequence == "walk"){
             if(clock % 6 == 0) this.WalkAnimation();
