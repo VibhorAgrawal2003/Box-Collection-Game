@@ -11,7 +11,112 @@ let road;
 
 let score = 0;
 let clock = 0;
-let maxtime = 3000; 
+let maxtime = 6000; 
+
+// animation frames
+const Mort = {
+    path: 'assets/sheets/mort.png',
+
+    idle1: {
+        cropX: 0,
+        cropY: 0,
+        cropWidth: 24,
+        cropHeight: 24,
+        scaleX: 48,
+        scaleY: 48,
+    },
+
+    idle2: {
+        cropX: 24,
+        cropY: 0,
+        cropWidth: 24,
+        cropHeight: 24,
+        scaleX: 48,
+        scaleY: 48,
+    },
+
+    idle3: {
+        cropX: 48,
+        cropY: 0,
+        cropWidth: 24,
+        cropHeight: 24,
+        scaleX: 48,
+        scaleY: 48,
+    },
+
+    walk1: {
+        cropX: 72,
+        cropY: 0,
+        cropWidth: 24,
+        cropHeight: 24,
+        scaleX: 48,
+        scaleY: 48,
+    },
+
+    walk2: {
+        cropX: 96,
+        cropY: 0,
+        cropWidth: 24,
+        cropHeight: 24,
+        scaleX: 48,
+        scaleY: 48,
+    },
+
+    walk3: {
+        cropX: 120,
+        cropY: 0,
+        cropWidth: 24,
+        cropHeight: 24,
+        scaleX: 48,
+        scaleY: 48,
+    },    
+
+    walk4: {
+        cropX: 144,
+        cropY: 0,
+        cropWidth: 24,
+        cropHeight: 24,
+        scaleX: 48,
+        scaleY: 48,
+    },  
+
+    walk5: {
+        cropX: 168,
+        cropY: 0,
+        cropWidth: 24,
+        cropHeight: 24,
+        scaleX: 48,
+        scaleY: 48,
+    },    
+    
+    walk5: {
+        cropX: 192,
+        cropY: 0,
+        cropWidth: 24,
+        cropHeight: 24,
+        scaleX: 48,
+        scaleY: 48,
+    },     
+
+    walk6: {
+        cropX: 216,
+        cropY: 0,
+        cropWidth: 24,
+        cropHeight: 24,
+        scaleX: 48,
+        scaleY: 48,
+    },   
+    
+    walk7: {
+        cropX: 240,
+        cropY: 0,
+        cropWidth: 24,
+        cropHeight: 24,
+        scaleX: 48,
+        scaleY: 48,
+    },       
+
+  };
 
 document.addEventListener('DOMContentLoaded', SetupCanvas);
 
@@ -136,30 +241,6 @@ class Road{
     }
 }
 
-const Mort = {
-
-    path : 'assets/sheets/mort.png',
-
-    idle1 : {
-        cropX : 0,
-        cropY : 0,
-        cropWidth : 24,
-        cropHeight : 24,
-        scaleX : 48,
-        scaleY : 48
-    },
-
-    idle2 : {
-        cropX : 24,
-        cropY : 0,
-        cropWidth : 24,
-        cropHeight : 24,
-        scaleX : 48,
-        scaleY : 48
-    }
-
-}
-
 class Player{
     constructor(){
         this.visible = true;
@@ -173,7 +254,10 @@ class Player{
         this.fillColor = '#000';
         this.sprite;
         this.character;
-        this.frame = "idle1";
+        this.sequence = "idle";
+        this.idleFrame = "idle1";
+        this.walkFrame = "walk1";
+        this.face = "right";
     }
 
     HitboxLeft(){
@@ -201,51 +285,131 @@ class Player{
         this.tall = this.character.scaleY;
     }
 
-    Draw(){
-
-        ctx.drawImage(
-            this.sprite,
-            this.character.cropX,
-            this.character.cropY,
-            this.character.cropWidth,
-            this.character.cropHeight,
-            this.x, this.y,
-            this.character.scaleX,
-            this.character.scaleY
-        );
-
-        // ctx.strokeStyle = this.strokeColor;
-        // ctx.fillStyle = this.fillColor;
-        // ctx.fillRect(this.x, this.y, this.thick, this.tall);
+    Draw() {
+        ctx.save();
+    
+        if (this.face == "left") {
+            ctx.translate(this.x + this.character.scaleX, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(
+                this.sprite,
+                this.character.cropX,
+                this.character.cropY,
+                this.character.cropWidth,
+                this.character.cropHeight,
+                0, this.y,
+                this.character.scaleX,
+                this.character.scaleY
+            );
+        }
+        
+        else if (this.face == "right") {
+            ctx.drawImage(
+                this.sprite,
+                this.character.cropX,
+                this.character.cropY,
+                this.character.cropWidth,
+                this.character.cropHeight,
+                this.x, this.y,
+                this.character.scaleX,
+                this.character.scaleY
+            );
+        }
+    
+        ctx.restore();
     }
 
     IdleAnimation(){
-        if(this.frame == "idle1"){
+        if(this.idleFrame == "idle1"){
             this.character = Mort.idle2;
-            this.frame = "idle2";
+            this.idleFrame = "idle2";
         }
-        else if(this.frame == "idle2"){
+        else if(this.idleFrame == "idle2"){
+            this.character = Mort.idle3;
+            this.idleFrame = "idle3";
+        }
+        else if(this.idleFrame == "idle3"){
             this.character = Mort.idle1;
-            this.frame = "idle1";
+            this.idleFrame = "idle1";
+        }
+
+    }
+
+    WalkAnimation(){
+
+        if(this.walkFrame == "walk1"){
+            this.character = Mort.walk2;
+            this.walkFrame = "walk2";
+        }
+        else if(this.walkFrame == "walk2"){
+            this.character = Mort.walk3;
+            this.walkFrame = "walk3";
+        }
+        else if(this.walkFrame == "walk3"){
+            this.character = Mort.walk4;
+            this.walkFrame = "walk4";
+        }
+        else if(this.walkFrame == "walk4"){
+            this.character = Mort.walk5;
+            this.walkFrame = "walk5";
+        }
+        else if(this.walkFrame == "walk5"){
+            this.character = Mort.walk6;
+            this.walkFrame = "walk6";
+        }
+        else if(this.walkFrame == "walk6"){
+            this.character = Mort.walk7;
+            this.walkFrame = "walk7";
+        }
+        else if(this.walkFrame == "walk7"){
+            this.character = Mort.walk1;
+            this.walkFrame = "walk1";
+        }
+
+    }
+
+    Animate(){
+
+        if(this.sequence == "idle"){
+            if(clock % 12 == 0) this.IdleAnimation();
+        }
+        else if(this.sequence == "walk"){
+            if(clock % 6 == 0) this.WalkAnimation();
         }
 
     }
 
     Update(){
+        // direction
         if(this.forward == 1 && this.x < canvasWidth- this.thick){
             this.x += this.speed;
+            if(this.face != "right"){
+                this.face = "right";
+            }
         }
         else if(this.forward == -1 && this.x > 0){
             this.x -= this.speed;
+            if(this.face != "left"){
+                this.face = "left";
+            }
         }
 
-        if(clock%10 == 0){
-            this.IdleAnimation();
+        // animation
+        if(this.forward != 0){
+            if(this.sequence != "walk"){
+                this.sequence = "walk";
+            }
         }
+        else{
+            if(this.sequence != "idle"){
+                this.sequence = "idle";
+            }
+        }
+
+        this.Animate();
+
     }
-
 }
-
 
 
 class Box{
@@ -289,7 +453,7 @@ class Box{
 
 }
 
-
+// game functions
 function BoxCollision(entity1, entity2){
     let c1, c2, c3, c4;
 
@@ -300,3 +464,4 @@ function BoxCollision(entity1, entity2){
 
     return c1 && c2 && c3 && c4;
 }
+  
