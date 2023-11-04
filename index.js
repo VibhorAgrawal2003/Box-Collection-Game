@@ -16,6 +16,7 @@ let maxtime = 3000;
 document.addEventListener('DOMContentLoaded', SetupCanvas);
 
 function SetupCanvas(){
+    // canvas
     canvas = document.getElementById('game-canvas');
     ctx = canvas.getContext('2d');
     canvas.width = canvasWidth;
@@ -23,11 +24,15 @@ function SetupCanvas(){
     ctx.strokeStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // objects
     player = new Player();
     road = new Road();
     boxes.push(new Box());
 
-    // Enable key presses
+    // loading
+    player.Load();
+
+    // key presses
     document.body.addEventListener("keydown", function(e){
         keys[e.keyCode] = true;
     });
@@ -35,7 +40,6 @@ function SetupCanvas(){
     document.body.addEventListener("keyup", function(e){
         keys[e.keyCode] = false;
     });
-
 
     Render();
 
@@ -95,6 +99,7 @@ function Render(){
         boxes.push(new Box());
     }
 
+    // frame selection
     if(clock == maxtime){
         Gameover();
     }
@@ -131,17 +136,44 @@ class Road{
     }
 }
 
+const Mort = {
+
+    path : 'assets/sheets/mort.png',
+
+    idle1 : {
+        cropX : 0,
+        cropY : 0,
+        cropWidth : 24,
+        cropHeight : 24,
+        scaleX : 48,
+        scaleY : 48
+    },
+
+    idle2 : {
+        cropX : 24,
+        cropY : 0,
+        cropWidth : 24,
+        cropHeight : 24,
+        scaleX : 48,
+        scaleY : 48
+    }
+
+}
+
 class Player{
     constructor(){
         this.visible = true;
         this.x = 20;
         this.y = canvasHeight - 70;
-        this.thick = 20;
-        this.tall = 40;
+        this.thick;
+        this.tall;
         this.forward = 0;
         this.speed = 6;
         this.strokeColor = '#000';
         this.fillColor = '#000';
+        this.sprite;
+        this.character;
+        this.frame = "idle1";
     }
 
     HitboxLeft(){
@@ -160,10 +192,43 @@ class Player{
         return this.y + this.tall;
     }
 
+    Load(){
+
+        this.character = Mort.idle1;
+        this.sprite = new Image();
+        this.sprite.src = Mort.path;
+        this.thick = this.character.scaleX;
+        this.tall = this.character.scaleY;
+    }
+
     Draw(){
-        ctx.strokeStyle = this.strokeColor;
-        ctx.fillStyle = this.fillColor;
-        ctx.fillRect(this.x, this.y, this.thick, this.tall);
+
+        ctx.drawImage(
+            this.sprite,
+            this.character.cropX,
+            this.character.cropY,
+            this.character.cropWidth,
+            this.character.cropHeight,
+            this.x, this.y,
+            this.character.scaleX,
+            this.character.scaleY
+        );
+
+        // ctx.strokeStyle = this.strokeColor;
+        // ctx.fillStyle = this.fillColor;
+        // ctx.fillRect(this.x, this.y, this.thick, this.tall);
+    }
+
+    IdleAnimation(){
+        if(this.frame == "idle1"){
+            this.character = Mort.idle2;
+            this.frame = "idle2";
+        }
+        else if(this.frame == "idle2"){
+            this.character = Mort.idle1;
+            this.frame = "idle1";
+        }
+
     }
 
     Update(){
@@ -172,6 +237,10 @@ class Player{
         }
         else if(this.forward == -1 && this.x > 0){
             this.x -= this.speed;
+        }
+
+        if(clock%10 == 0){
+            this.IdleAnimation();
         }
     }
 
