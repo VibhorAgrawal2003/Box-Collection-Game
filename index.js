@@ -195,7 +195,7 @@ function Render(){
         if(boxes[i].visible){
             boxes[i].Draw();
         }
-        if(boxes[i].y >= floorHeight){
+        if(boxes[i].y + boxes[i].tall >= floorHeight){
             boxes.splice(i, 1);
         }
     }
@@ -255,10 +255,9 @@ class Player{
         this.y = canvasHeight - 70;
         this.thick;
         this.tall;
+        this.offset = 5;
         this.forward = 0;
         this.speed = 6;
-        this.strokeColor = '#000';
-        this.fillColor = '#000';
         this.sprite;
         this.character;
         this.sequence = "idle";
@@ -268,11 +267,11 @@ class Player{
     }
 
     HitboxLeft(){
-        return this.x;
+        return this.x + this.offset;
     }
 
     HitboxRight(){
-        return this.x + this.thick;
+        return this.x + this.thick - this.offset;
     }
 
     HitboxUp(){
