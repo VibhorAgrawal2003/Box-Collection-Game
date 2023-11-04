@@ -11,7 +11,54 @@ body{
 }
 
 #game-canvas {
-    background: #bee1ed;
     border: 1px solid #000;
     margin: auto;
+    position: relative;
+    z-index: 4;
+}
+
+#background {
+    position: relative;
+    width: 640px;
+    height: 384px;
+    margin: auto;
+}
+
+#sky {
+    background-image: url("./assets/backgrounds/BG1.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#mountains {
+    background-image: url("./assets/backgrounds/BG2.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+#ground {
+    background-image: url("./assets/backgrounds/BG3.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
 }

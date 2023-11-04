@@ -1,7 +1,7 @@
 let canvas;
 let ctx;
-let canvasWidth = 800;
-let canvasHeight = 400;
+let canvasWidth = 640;
+let canvasHeight = 384;
 let floorHeight = canvasHeight - 30;
 
 let keys = [];
@@ -147,7 +147,7 @@ function Render(){
     clock += 1;
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     ctx.fillStyle = 'black';
-    ctx.font = '16px Arial';
+    ctx.font = '16px Arial bold';
     ctx.fillText('Score: ' + score.toString(), 20, 24);
     ctx.fillText('Timer: ' + (Math.round((maxtime - clock)/50)).toString(), 20, 48);    
 
@@ -223,7 +223,7 @@ class Road{
         this.thick = canvasWidth;
         this.tall = 40;
         this.strokeColor = '#0a590f';
-        this.fillColor = '#49ba5c';
+        this.fillColor = '#4cb078';
     }
 
     Draw(){
