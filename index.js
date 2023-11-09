@@ -1,9 +1,9 @@
 // Canvas variables
 let canvas;
 let ctx;
-let canvasWidth = 640;
-let canvasHeight = 384;
-let onFloor = canvasHeight - 70;
+let canvasWidth = ABSOLUTE_WIDTH;
+let canvasHeight = ABSOLUTE_HEIGHT;
+let onFloor = ABSOLUTE_HEIGHT - GROUND_DEPTH;
 
 // Dynamic variables
 let keys = [];
@@ -12,7 +12,6 @@ let clock = 0;
 // Game objects
 let player;
 let road;
-
 
 document.addEventListener('DOMContentLoaded', SetupCanvas);
 
@@ -51,7 +50,6 @@ function SetupCanvas(){
     });
 
     Render();
-
 }
 
 
@@ -84,13 +82,12 @@ function Render(){
         }
     }
 
-
     // draw the player
     player.Update();
     if(player.visible){
         player.Draw();
     }
 
-    requestAnimationFrame(Render);        
-
+    requestAnimationFrame(Render);  
+          
 }

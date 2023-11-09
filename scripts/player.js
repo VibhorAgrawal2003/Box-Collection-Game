@@ -8,7 +8,7 @@ class Player{
         this.offset = 5;
         this.forward = 0;
         this.upward = 0;
-        this.jumpHeight = 60;
+        this.jumpHeight = 80;
         this.speed = 6;
         this.sprite;
         this.character;
@@ -115,11 +115,8 @@ class Player{
         }
 
         if(this.upward == 1){
-
-            console.log("upward == ", this.upward);
-
             if(this.y > onFloor - this.jumpHeight){
-                this.y -= 5;
+                this.y -= 6;
             }
             else{
                 this.upward = -1;
@@ -128,11 +125,8 @@ class Player{
         }
 
         else if(this.upward == -1){
-            
-            console.log("upward == ", this.upward);
-
             if(this.y < onFloor){
-                this.y += 6;
+                this.y += 7;
             }
             else{
                 this.upward = 0;

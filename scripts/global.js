@@ -1,0 +1,4 @@
+const ABSOLUTE_WIDTH = 640;
+const ABSOLUTE_HEIGHT = 384;
+const GROUND_DEPTH = 70;
+const GRAVITY = 0.2;
