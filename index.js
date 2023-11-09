@@ -39,6 +39,8 @@ function SetupCanvas(){
             keys.push(key);
         }
 
+        console.log(keys);
+
     });
 
     document.body.addEventListener("keyup", function(event){
@@ -47,6 +49,9 @@ function SetupCanvas(){
         if(index !== -1){
             keys.splice(index, 1);
         }
+
+        console.log(keys);
+
     });
 
     Render();
@@ -69,17 +74,15 @@ function Render(){
     // check controls
     player.forward = 0;
     if(keys.includes('ArrowRight') || keys.includes('d')){
-        player.forward = 1;
+        if(player.forward != 1) player.forward = 1;
     }
 
-    if(keys.includes('ArrowLeft') || keys.includes('a')){
-        player.forward = -1;
+    else if(keys.includes('ArrowLeft') || keys.includes('a')){
+        if(player.forward != -1) player.forward = -1;
     }
 
-    if(player.upward == 0){
-        if(keys.includes('ArrowUp') || keys.includes('w')){
-            player.upward = 1;
-        }
+    if(keys.includes('ArrowUp') || keys.includes('w')){
+        if(player.upward == 0) player.upward = 1;
     }
 
     // draw the player

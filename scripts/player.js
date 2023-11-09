@@ -1,15 +1,24 @@
 class Player{
     constructor(){
         this.visible = true;
-        this.x = 20;
-        this.y = onFloor;
+
+        // physics
+        this.x = START_X;
+        this.y = START_Y;
+        this.velx = START_VELX;
+        this.vely = START_VELY;
+        this.thrust = 10;
+
+        // bounds
         this.thick;
         this.tall;
         this.offset = 5;
+
+        // directions
         this.forward = 0;
         this.upward = 0;
-        this.jumpHeight = 80;
-        this.speed = 6;
+
+        // visuals
         this.sprite;
         this.character;
         this.sequence = "idle";
@@ -29,7 +38,6 @@ class Player{
 
 
     Load(){
-
         this.character = Mort.idle1;
         this.sprite = new Image();
         this.sprite.src = Mort.path;
@@ -72,68 +80,47 @@ class Player{
     }
 
     Update(){
-
         this.Move();
-
-        if(this.forward != 0){
-            if(this.sequence != "walk"){
-                this.sequence = "walk";
-            }
-        }
-        else{
-            if(this.sequence != "idle"){
-                this.sequence = "idle";
-            }
-        }
-
         this.Animate();
     } 
 
-    Animate(){
-
-        if(this.sequence == "idle"){
-            if(clock % 6 == 0) this.IdleAnimation();
-        }
-        else if(this.sequence == "walk"){
-            if(clock % 6 == 0) this.WalkAnimation();
-        }
-
-    }
-
     Move(){
+        // walk
         if(this.forward == 1 && this.x < canvasWidth- this.thick){
-            this.x += this.speed;
-            if(this.face != "right"){
-                this.face = "right";
-            }
+            this.x += this.velx;
+            this.face = "right";
         }
         else if(this.forward == -1 && this.x > 0){
-            this.x -= this.speed;
-            if(this.face != "left"){
-                this.face = "left";
-            }
+            this.x -= this.velx;
+            this.face = "left";
         }
 
+        // jump
         if(this.upward == 1){
-            if(this.y > onFloor - this.jumpHeight){
-                this.y -= 6;
-            }
-            else{
-                this.upward = -1;
-            }
-
+            this.vely -= this.thrust;
+            this.upward = -1;
         }
-
         else if(this.upward == -1){
-            if(this.y < onFloor){
-                this.y += 7;
+            if(this.y < ON_FLOOR){
+                this.vely += GRAVITY;
             }
             else{
+                this.vely = 0;
                 this.upward = 0;
             }
-
         }
+        this.y += this.vely;
+
     }
+
+    Animate(){
+        if(this.forward != 0){
+            if(clock % 6 == 0) this.WalkAnimation();
+        }
+        else{
+            if(clock % 6 == 0) this.IdleAnimation();
+        }
+    }    
 
     IdleAnimation(){
         if(this.idleFrame == "idle1"){
@@ -156,7 +143,6 @@ class Player{
     }
 
     WalkAnimation(){
-
         if(this.walkFrame == "walk1"){
             this.character = Mort.walk2;
             this.walkFrame = "walk2";
