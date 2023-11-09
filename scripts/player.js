@@ -2,26 +2,26 @@ class Player{
     constructor(){
         this.visible = true;
 
-        // physics
-        this.x = START_X;
-        this.y = START_Y;
-        this.velx = START_VELX;
-        this.vely = START_VELY;
-        this.thrust = 10;
-
         // bounds
-        this.thick;
-        this.tall;
-        this.offset = 5;
+        this.thick = 32;
+        this.tall = 32;
+        this.offset = 5;    
+        this.onFloor = BASE - this.tall - this.offset;    
 
         // directions
         this.forward = 0;
         this.upward = 0;
 
+        // physics
+        this.x = 40;
+        this.y = this.onFloor;
+        this.velx = 6;
+        this.vely = 0;
+        this.thrust = 10;
+
         // visuals
+        this.sheet;
         this.sprite;
-        this.character;
-        this.sequence = "idle";
         this.idleFrame = "idle1";
         this.walkFrame = "walk1";
         this.face = "right";
@@ -36,52 +36,20 @@ class Player{
         }
     }
 
-
     Load(){
-        this.character = Mort.idle1;
-        this.sprite = new Image();
-        this.sprite.src = Mort.path;
-        this.thick = this.character.scaleX;
-        this.tall = this.character.scaleY;
-    }
-
-    Draw() {
-        ctx.save();
-    
-        if (this.face == "left") {
-            ctx.translate(this.x + this.character.scaleX, 0);
-            ctx.scale(-1, 1);
-            ctx.drawImage(
-                this.sprite,
-                this.character.cropX,
-                this.character.cropY,
-                this.character.cropWidth,
-                this.character.cropHeight,
-                0, this.y,
-                this.character.scaleX,
-                this.character.scaleY
-            );
-        }
-        
-        else if (this.face == "right") {
-            ctx.drawImage(
-                this.sprite,
-                this.character.cropX,
-                this.character.cropY,
-                this.character.cropWidth,
-                this.character.cropHeight,
-                this.x, this.y,
-                this.character.scaleX,
-                this.character.scaleY
-            );
-        }
-    
-        ctx.restore();
+        this.sprite = Mort.idle1;
+        this.sheet = new Image();
+        this.sheet.src = Mort.path;
+        this.thick = this.sprite.scaleX;
+        this.tall = this.sprite.scaleY;
     }
 
     Update(){
         this.Move();
         this.Animate();
+        if(this.visible){
+            this.Draw();
+        }
     } 
 
     Move(){
@@ -101,7 +69,7 @@ class Player{
             this.upward = -1;
         }
         else if(this.upward == -1){
-            if(this.y < ON_FLOOR){
+            if(this.y < this.onFloor){
                 this.vely += GRAVITY;
             }
             else{
@@ -109,7 +77,10 @@ class Player{
                 this.upward = 0;
             }
         }
-        this.y += this.vely;
+
+        // land
+        if(this.y + this.vely > this.onFloor) this.y = this.onFloor;
+        else this.y += this.vely;
 
     }
 
@@ -122,21 +93,55 @@ class Player{
         }
     }    
 
+    Draw() {
+        ctx.save();
+    
+        if (this.face == "left") {
+            ctx.translate(this.x + this.sprite.scaleX, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(
+                this.sheet,
+                this.sprite.cropX,
+                this.sprite.cropY,
+                this.sprite.cropWidth,
+                this.sprite.cropHeight,
+                0, this.y,
+                this.sprite.scaleX,
+                this.sprite.scaleY
+            );
+        }
+        
+        else if (this.face == "right") {
+            ctx.drawImage(
+                this.sheet,
+                this.sprite.cropX,
+                this.sprite.cropY,
+                this.sprite.cropWidth,
+                this.sprite.cropHeight,
+                this.x, this.y,
+                this.sprite.scaleX,
+                this.sprite.scaleY
+            );
+        }
+    
+        ctx.restore();
+    }    
+
     IdleAnimation(){
         if(this.idleFrame == "idle1"){
-            this.character = Mort.idle2;
+            this.sprite = Mort.idle2;
             this.idleFrame = "idle2";
         }
         else if(this.idleFrame == "idle2"){
-            this.character = Mort.idle3;
+            this.sprite = Mort.idle3;
             this.idleFrame = "idle3";
         }
         else if(this.idleFrame == "idle3"){
-            this.character = Mort.idle4;
+            this.sprite = Mort.idle4;
             this.idleFrame = "idle4";
         }
         else if(this.idleFrame == "idle4"){
-            this.character = Mort.idle1;
+            this.sprite = Mort.idle1;
             this.idleFrame = "idle1";
         }
 
@@ -144,27 +149,27 @@ class Player{
 
     WalkAnimation(){
         if(this.walkFrame == "walk1"){
-            this.character = Mort.walk2;
+            this.sprite = Mort.walk2;
             this.walkFrame = "walk2";
         }
         else if(this.walkFrame == "walk2"){
-            this.character = Mort.walk3;
+            this.sprite = Mort.walk3;
             this.walkFrame = "walk3";
         }
         else if(this.walkFrame == "walk3"){
-            this.character = Mort.walk4;
+            this.sprite = Mort.walk4;
             this.walkFrame = "walk4";
         }
         else if(this.walkFrame == "walk4"){
-            this.character = Mort.walk5;
+            this.sprite = Mort.walk5;
             this.walkFrame = "walk5";
         }
         else if(this.walkFrame == "walk5"){
-            this.character = Mort.walk6;
+            this.sprite = Mort.walk6;
             this.walkFrame = "walk6";
         }
         else if(this.walkFrame == "walk6"){
-            this.character = Mort.walk1;
+            this.sprite = Mort.walk1;
             this.walkFrame = "walk1";
         }
     }
