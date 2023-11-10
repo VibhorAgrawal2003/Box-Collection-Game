@@ -13,7 +13,7 @@ class Chicken {
         this.upward = 0;    
 
         // physics
-        this.x = canvasWidth - 80;
+        this.x = 200;
         this.y = this.onFloor;
         this.velx = 0;
         this.vely = 0;
@@ -23,7 +23,7 @@ class Chicken {
         this.sheet;
         this.sprite;
         this.idleFrame = "idle1";
-        this.walkFrame = "walk1";
+        this.runFrame = "run1";
         this.face = "right";
     }
 
@@ -36,6 +36,13 @@ class Chicken {
     }
 
     Update(){
+
+        // cycle
+        if(clock % 200 == 0){
+            if(this.forward == 0) this.forward = 1;
+            else this.forward = 0;
+        }
+
         // this.Move();
         this.Animate();
         if(this.visible){
@@ -45,7 +52,7 @@ class Chicken {
 
     Animate(){
         if(this.forward != 0){
-            if(clock % 6 == 0) this.WalkAnimation();
+            if(clock % 2 == 0) this.RunAnimation();
         }
         else{
             if(clock % 2 == 0) this.IdleAnimation();
@@ -108,10 +115,89 @@ class Chicken {
 
     }    
 
+    RunAnimation() {
+        if(this.runFrame == "run1"){
+            this.sprite = Ralph.Run.run2;
+            this.runFrame = "run2";
+        }
+        else if(this.runFrame == "run2"){
+            this.sprite = Ralph.Run.run3;
+            this.runFrame = "run3";
+        }
+        else if(this.runFrame == "run3"){
+            this.sprite = Ralph.Run.run4;
+            this.runFrame = "run4";
+        }
+        else if(this.runFrame == "run4"){
+            this.sprite = Ralph.Run.run5;
+            this.runFrame = "run5";
+        }
+        else if(this.runFrame == "run5"){
+            this.sprite = Ralph.Run.run6;
+            this.runFrame = "run6";
+        }
+        else if(this.runFrame == "run6"){
+            this.sprite = Ralph.Run.run7;
+            this.runFrame = "run7";
+        }
+        else if(this.runFrame == "run7"){
+            this.sprite = Ralph.Run.run8;
+            this.runFrame = "run8";
+        }
+        else if(this.runFrame == "run8"){
+            this.sprite = Ralph.Run.run9;
+            this.runFrame = "run9";
+        }
+        else if(this.runFrame == "run9"){
+            this.sprite = Ralph.Run.run10;
+            this.runFrame = "run10";
+        }
+        else if(this.runFrame == "run10"){
+            this.sprite = Ralph.Run.run11;
+            this.runFrame = "run11";
+        }
+        else if(this.runFrame == "run11"){
+            this.sprite = Ralph.Run.run12;
+            this.runFrame = "run12";
+        }
+        else if(this.runFrame == "run12"){
+            this.sprite = Ralph.Run.run13;
+            this.runFrame = "run13";
+        }
+        else if(this.runFrame == "run13"){
+            this.sprite = Ralph.Run.run14;
+            this.runFrame = "run14";
+        }
+        else if(this.runFrame == "run14"){
+            this.sprite = Ralph.Run.run1;
+            this.runFrame = "run1";
+        }
+
+    }
+
     Draw() {
         ctx.save();
     
+        if(this.forward == 0){
+            this.sheet.src = Ralph.Idle.path;
+        }
+        else{
+            this.sheet.src = Ralph.Run.path;
+        }
+
         if (this.face == "left") {
+            ctx.drawImage(
+                this.sheet,
+                this.sprite.cropX,
+                this.sprite.cropY,
+                this.sprite.cropWidth,
+                this.sprite.cropHeight,
+                this.x, this.y,
+                this.sprite.scaleX,
+                this.sprite.scaleY
+            );
+        }
+        else if (this.face == "right") {
             ctx.translate(this.x + this.sprite.scaleX, 0);
             ctx.scale(-1, 1);
             ctx.drawImage(
@@ -125,20 +211,7 @@ class Chicken {
                 this.sprite.scaleY
             );
         }
-        
-        else if (this.face == "right") {
-            ctx.drawImage(
-                this.sheet,
-                this.sprite.cropX,
-                this.sprite.cropY,
-                this.sprite.cropWidth,
-                this.sprite.cropHeight,
-                this.x, this.y,
-                this.sprite.scaleX,
-                this.sprite.scaleY
-            );
-        }
-    
+
         ctx.restore();
     }
 
