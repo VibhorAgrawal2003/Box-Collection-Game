@@ -12,6 +12,7 @@ let clock = 0;
 // Game objects
 let player;
 let road;
+let enemies = [];
 
 document.addEventListener('DOMContentLoaded', SetupCanvas);
 
@@ -27,9 +28,9 @@ function SetupCanvas(){
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // create game objects
-    player = new Player();
     road = new Road();
-    player.Load();
+    player = new Player();
+    enemies.push(new Chicken("left"));
 
     // enable key presses
     document.body.addEventListener("keydown", function(event){
@@ -39,8 +40,6 @@ function SetupCanvas(){
             keys.push(key);
         }
 
-        console.log(keys);
-
     });
 
     document.body.addEventListener("keyup", function(event){
@@ -49,8 +48,6 @@ function SetupCanvas(){
         if(index !== -1){
             keys.splice(index, 1);
         }
-
-        console.log(keys);
 
     });
 
@@ -63,16 +60,19 @@ function Render(){
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     ctx.font = "16px Arial";
     ctx.fillStyle = "#000000"
-    ctx.fillText("x left->right", 5, 30);
-    ctx.fillText("y up->down", 5, 50);
-
+    ctx.fillText("clock: " + clock, 24, 24);
+    ctx.fillText("seconds: " + Math.trunc(clock/30), 24, 48);
+    
     // draw the road
     if(road.visible){
         road.Draw();
     }
 
-    // check controls
+    // default states
     player.forward = 0;
+    player.crouch = 0;
+
+    // check controls
     if(keys.includes('ArrowRight') || keys.includes('d')){
         if(player.forward != 1) player.forward = 1;
     }
@@ -85,12 +85,33 @@ function Render(){
         if(player.upward == 0) player.upward = 1;
     }
 
-    // draw the player
-    player.Update();
-    if(player.visible){
-        player.Draw();
+    else if(keys.includes('ArrowDown') || keys.includes('s')){
+        if(player.crouch == 0) player.crouch = 1;
     }
 
+    // update objects
+    for(let i = 0; i < enemies.length; i++){
+        if(enemies[i].type == "Chicken"){
+
+            let chicken = enemies[i];
+
+            if(BoxCollision(player, chicken)){
+                console.log("Collision detected!");
+            }
+
+            if(chicken.spawnloc == "left" && chicken.x > canvasWidth + chicken.thick + chicken.offset){
+                enemies.splice(i, 1);
+                enemies.push(new Chicken("right"));
+            }
+            else if(chicken.spawnloc == "right" && chicken.x < -chicken.thick - chicken.offset){
+                enemies.splice(i, 1);
+                enemies.push(new Chicken("left"));
+            }
+        }
+
+        enemies[i].Update();
+    }
+    player.Update();
     requestAnimationFrame(Render);  
-          
+    
 }
