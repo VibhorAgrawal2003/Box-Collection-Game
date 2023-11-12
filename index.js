@@ -12,7 +12,7 @@ let clock = 0;
 // Game objects
 let player;
 let road;
-let chicken;
+let enemies = [];
 
 document.addEventListener('DOMContentLoaded', SetupCanvas);
 
@@ -29,12 +29,8 @@ function SetupCanvas(){
 
     // create game objects
     road = new Road();
-
     player = new Player();
-    player.Load();
-
-    chicken = new Chicken();
-    chicken.Load();
+    enemies.push(new Chicken("left"));
 
     // enable key presses
     document.body.addEventListener("keydown", function(event){
@@ -44,8 +40,6 @@ function SetupCanvas(){
             keys.push(key);
         }
 
-        console.log(keys);
-
     });
 
     document.body.addEventListener("keyup", function(event){
@@ -54,8 +48,6 @@ function SetupCanvas(){
         if(index !== -1){
             keys.splice(index, 1);
         }
-
-        console.log(keys);
 
     });
 
@@ -76,8 +68,11 @@ function Render(){
         road.Draw();
     }
 
-    // check controls
+    // default states
     player.forward = 0;
+    player.crouch = 0;
+
+    // check controls
     if(keys.includes('ArrowRight') || keys.includes('d')){
         if(player.forward != 1) player.forward = 1;
     }
@@ -90,8 +85,32 @@ function Render(){
         if(player.upward == 0) player.upward = 1;
     }
 
+    else if(keys.includes('ArrowDown') || keys.includes('s')){
+        if(player.crouch == 0) player.crouch = 1;
+    }
+
     // update objects
-    chicken.Update();
+    for(let i = 0; i < enemies.length; i++){
+        if(enemies[i].type == "Chicken"){
+
+            let chicken = enemies[i];
+
+            if(BoxCollision(player, chicken)){
+                console.log("Collision detected!");
+            }
+
+            if(chicken.spawnloc == "left" && chicken.x > canvasWidth + chicken.thick + chicken.offset){
+                enemies.splice(i, 1);
+                enemies.push(new Chicken("right"));
+            }
+            else if(chicken.spawnloc == "right" && chicken.x < -chicken.thick - chicken.offset){
+                enemies.splice(i, 1);
+                enemies.push(new Chicken("left"));
+            }
+        }
+
+        enemies[i].Update();
+    }
     player.Update();
     requestAnimationFrame(Render);  
     

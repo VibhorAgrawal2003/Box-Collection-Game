@@ -6,11 +6,13 @@ class Player{
         this.thick = 32;
         this.tall = 32;
         this.offset = 5;    
+        this.inset = 5;
         this.onFloor = BASE - this.tall - this.offset;    
 
         // directions
         this.forward = 0;
         this.upward = 0;
+        this.crouch = 0;
 
         // physics
         this.x = 40;
@@ -18,21 +20,27 @@ class Player{
         this.velx = 6;
         this.vely = 0;
         this.thrust = 10;
+        this.boost = 2;
 
         // visuals
         this.sheet;
         this.sprite;
         this.idleFrame = "idle1";
         this.walkFrame = "walk1";
+        this.jumpFrame = "jump1";
+        this.duckFrame = "duck1";
         this.face = "right";
+
+        // set values
+        this.Load();
     }
 
     Hitbox(){
         return {
-            left: this.x + this.offset,
-            right: this.x + this.thick - this.offset,
-            up: this.y,
-            down: this.y + this.tall
+            left: this.x + this.inset,
+            right: this.x + this.thick - this.inset,
+            up: this.y + this.inset,
+            down: this.y + this.tall - this.inset,
         }
     }
 
@@ -56,10 +64,12 @@ class Player{
         // walk
         if(this.forward == 1 && this.x < canvasWidth- this.thick){
             this.x += this.velx;
+            if(this.crouch) this.x += this.boost;
             this.face = "right";
         }
         else if(this.forward == -1 && this.x > 0){
             this.x -= this.velx;
+            if(this.crouch) this.x -= this.boost;
             this.face = "left";
         }
 
@@ -85,7 +95,10 @@ class Player{
     }
 
     Animate(){
-        if(this.forward != 0){
+        if(this.crouch){
+            if(clock % 6 == 0) this.DuckAnimation();
+        }
+        else if(this.forward != 0){
             if(clock % 6 == 0) this.WalkAnimation();
         }
         else{
@@ -173,4 +186,46 @@ class Player{
             this.walkFrame = "walk1";
         }
     }
+
+    DuckAnimation(){
+
+        if(this.forward == 0){
+            this.sprite = Mort.duck1;
+            this.duckFrame = "duck1";
+        }
+
+        else{
+
+            if(this.duckFrame == "duck1"){
+                this.sprite = Mort.duck2;
+                this.duckFrame = "duck2";
+            }
+            else if(this.duckFrame == "duck2"){
+                this.sprite = Mort.duck3;
+                this.duckFrame = "duck3";
+            }
+            else if(this.duckFrame == "duck3"){
+                this.sprite = Mort.duck4;
+                this.duckFrame = "duck4";
+            }
+            else if(this.duckFrame == "duck4"){
+                this.sprite = Mort.duck5;
+                this.duckFrame = "duck5";
+            }
+            else if(this.duckFrame == "duck5"){
+                this.sprite = Mort.duck6;
+                this.duckFrame = "duck6";
+            }
+            else if(this.duckFrame == "duck6"){
+                this.sprite = Mort.duck7;
+                this.duckFrame = "duck7";
+            }
+            else if(this.duckFrame == "duck7"){
+                this.sprite = Mort.duck2;
+                this.duckFrame = "duck2";
+            }
+        }
+    }
+
+
 }

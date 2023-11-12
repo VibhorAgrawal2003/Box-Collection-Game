@@ -1,21 +1,24 @@
 class Chicken {
-    constructor(){
+    constructor(spawnloc){
         this.visible = true;
+        this.type = 'Chicken';
 
         // bounds
         this.thick = 32;
         this.tall = 34;
         this.offset = 28;
+        this.inset = 10;
         this.onFloor = BASE - this.tall - this.offset; 
 
         // directions
+        this.spawnloc = spawnloc;
         this.forward = 0;
         this.upward = 0;    
 
         // physics
-        this.x = 200;
+        this.x;
         this.y = this.onFloor;
-        this.velx = 0;
+        this.velx = 7;
         this.vely = 0;
         this.thrust = 4;
 
@@ -24,10 +27,31 @@ class Chicken {
         this.sprite;
         this.idleFrame = "idle1";
         this.runFrame = "run1";
-        this.face = "right";
+        this.face;
+
+        // set values
+        this.Load();
+    }
+
+    Hitbox(){
+        return {
+            left: this.x + this.inset,
+            right: this.x + this.thick - this.inset,
+            up: this.y + this.inset,
+            down: this.y + this.tall - this.inset
+        }
     }
 
     Load(){
+        if(this.spawnloc == "left"){
+            this.x = -56;
+            this.face = "right";
+        }
+        else if(this.spawnloc == "right"){
+            this.x = canvasWidth - 8;
+            this.face = "left";
+        }
+
         this.sprite = Ralph.Idle.idle1;
         this.sheet = new Image();
         this.sheet.src = Ralph.Idle.path;
@@ -37,18 +61,42 @@ class Chicken {
 
     Update(){
 
-        // cycle
-        if(clock % 200 == 0){
-            if(this.forward == 0) this.forward = 1;
-            else this.forward = 0;
+        // directions
+
+        if(this.spawnloc == "left"){
+            if(clock % 200 == 0 && this.forward == 0){
+                this.forward = 1;
+            }
+            else if(clock % 50 == 0 && this.forward == 1){
+                this.forward = 0;
+            }
+        }
+        else if(this.spawnloc == "right"){
+            if(clock % 200 == 0 && this.forward == 0){
+                this.forward = -1;
+            }
+            else if(clock % 50 == 0 && this.forward == -1){
+                this.forward = 0;
+            }
         }
 
-        // this.Move();
+        this.Move();
         this.Animate();
         if(this.visible){
             this.Draw();
         }
     } 
+
+    Move(){
+
+        if(this.forward == 1){
+            this.x += this.velx;
+        }
+        else if(this.forward == -1){
+            this.x -= this.velx;
+        }
+
+    }
 
     Animate(){
         if(this.forward != 0){
